@@ -2,7 +2,7 @@
 function get_request_param($name, $default_value=FALSE, $choices = FALSE)
 {
 	$name=trim($name);
-	$value="";
+	$value=$default_value;
 	if(array_key_exists($name, $_GET))
 	{
 		$value=$_GET[$name];
@@ -11,9 +11,10 @@ function get_request_param($name, $default_value=FALSE, $choices = FALSE)
 	{
 		$value=$_POST[$name];
 	}
-	if(!is_array($value))
+	if(is_string($value) && !empty($value))
 	{
-		$value=trim($value);
+		$value = urldecode(urldecode($value));
+		$value = trim($value);
 	}
 	if(!empty($choices)&&is_array($choices))
 	{
@@ -22,20 +23,11 @@ function get_request_param($name, $default_value=FALSE, $choices = FALSE)
 			return $default_value;
 		}
 	}
-
-	if(!empty($value))
+	if(empty($value))
 	{
-		if(!is_array($value))
-		{
-			return urldecode(urldecode($value));
-		}
-		else
-		{
-			return $value;
-		}
-		
+		return $default_value;
 	}
-	return $default_value;
+	return $value;
 }
 
 function get_boolean_request_param($name, $default_value=FALSE)
