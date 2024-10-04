@@ -71,7 +71,7 @@ function fetch_one_row($sql, $column = NULL, $dto = NULL, $db_handle = NULL)
 
 function cleanup_sql_results_as_hash($results)
 {
-	if(empty($results))
+	if(empty($results) || !is_array($results) || (is_array($results) && count($results)>0))
 	{
 		return $results;
 	}
